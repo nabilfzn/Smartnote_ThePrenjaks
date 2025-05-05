@@ -149,6 +149,7 @@ python app.py
 
 ---
 
+```bash
 ## 📂 Struktur Proyek 
 
 SMARTNOTE_FINAL/
@@ -177,6 +178,7 @@ SMARTNOTE_FINAL/
 │           ├── sidebar.html
 │           ├── arsip-rekaman.html
 │           └── arsip-transkrip.html
+```
 
-
+## Desain Sistem Smartnote
 
