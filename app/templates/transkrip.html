@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Title -->
+        <title>SmartNote - Soal AI</title>
+        <!-- Favicon -->
+        <link rel="shortcut icon" href="{{ url_for('static', filename='assets/images/logo/favicon.png') }}">
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/bootstrap.min.css') }}">
+        <!-- File upload -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/file-upload.css') }}">
+        <!-- Plyr -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/plyr.css') }}">
+        <!-- DataTables -->
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
+        <!-- jQuery UI -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/jquery-ui.css') }}">
+        <!-- Editor Quill -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/editor-quill.css') }}">
+        <!-- ApexCharts -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/apexcharts.css') }}">
+        <!-- Calendar -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/calendar.css') }}">
+        <!-- JVector Map -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/jquery-jvectormap-2.0.5.css') }}">
+        <!-- Main CSS -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/main.css') }}">
+    </head>
+    
+<body>
+    
+<!--==================== Preloader Start ====================-->
+  <div class="preloader">
+    <div class="loader"></div>
+  </div>
+<!--==================== Preloader End ====================-->
+
+<!--==================== Sidebar Overlay End ====================-->
+<div class="side-overlay"></div>
+<!--==================== Sidebar Overlay End ====================-->
+
+
+<!-- ============================ Sidebar Start ============================ -->
+    {%include 'components/sidebar.html'%}
+<!-- ============================ Sidebar End  ============================ -->
+
+
+    <div class="dashboard-main-wrapper">
+
+        <div class="top-navbar flex-between gap-16">
+
+            <div class="flex-align gap-16">
+                <!-- Toggle Button Start -->
+                <button type="button" class="toggle-btn d-xl-none d-flex text-26 text-gray-500"><i class="ph ph-list"></i></button>
+                <!-- Toggle Button End -->
+                
+                <form action="#" class="w-350 d-sm-block d-none">
+                    <div class="position-relative">
+                        <button type="submit" class="input-icon text-xl d-flex text-gray-100 pointer-event-none"><i class="ph ph-magnifying-glass"></i></button> 
+                        <input type="text" class="form-control ps-40 h-40 border-transparent focus-border-main-600 bg-main-50 rounded-pill placeholder-15" placeholder="Cari...">
+                    </div>
+                </form>
+            </div>
+
+            <div class="flex-align gap-16">
+                <div class="flex-align gap-8">
+                    <!-- Notification Start -->
+                    <div class="dropdown">
+                        <button class="dropdown-btn shaking-animation text-gray-500 w-40 h-40 bg-main-50 hover-bg-main-100 transition-2 rounded-circle text-xl flex-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="position-relative">
+                                <i class="ph ph-bell"></i>
+                                <span class="alarm-notify position-absolute end-0"></span>
+                            </span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu--lg border-0 bg-transparent p-0">
+                            <div class="card border border-gray-100 rounded-12 box-shadow-custom p-0 overflow-hidden">
+                                <div class="card-body p-0">
+                                    <div class="py-8 px-24 bg-main-600">
+                                        <div class="flex-between">
+                                            <h5 class="text-xl fw-semibold text-white mb-0">Notifikasi</h5>
+                                            <div class="flex-align gap-12">
+                                                <button type="button" class="bg-white rounded-6 text-sm px-8 py-2 hover-text-primary-600"> Baru </button>
+                                                <button type="button" class="close-dropdown hover-scale-1 text-xl text-white"><i class="ph ph-x"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-24 max-h-270 overflow-y-auto scroll-sm">
+                                        <div class="d-flex align-items-start gap-12">
+                                            <img src="assets/images/thumbs/notification-img1.png" alt="" class="w-48 h-48 rounded-circle object-fit-cover">
+                                            <div class="border-bottom border-gray-100 mb-24 pb-24">
+                                                <div class="flex-align gap-4">
+                                                    <a href="#" class="fw-medium text-15 mb-0 text-gray-300 hover-text-main-600 text-line-2">Rekaman "Bab 3 - Fisika Dasar" telah selesai diproses oleh AI. </a>
+                                                </div>
+                                                <div class="flex-align gap-6 mt-8">
+                                                    <img src="assets/images/icons/google-drive.png" alt="">
+                                                    <div class="flex-align gap-4">
+                                                        <p class="text-gray-900 text-sm text-line-1">Lihat hasil rekaman</p>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-16 flex-align gap-8">
+                                                    <button type="button" class="btn btn-main py-8 text-15 fw-normal px-16">Lihat Hasil</button>
+                                                </div>
+                                                <span class="text-gray-200 text-13 mt-8">2 menit yang lalu</span>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-start gap-12">
+                                            <img src="assets/images/thumbs/notification-img2.png" alt="" class="w-48 h-48 rounded-circle object-fit-cover">
+                                            <div class="">
+                                                <a href="#" class="fw-medium text-15 mb-0 text-gray-300 hover-text-main-600 text-line-2">Siswa Anda telah menyelesaikan soal "Bab 4 - Matematika Dasar"</a>
+                                                <span class="text-gray-200 text-13">15 menit yang lalu</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <a href="#" class="py-13 px-24 fw-bold text-center d-block text-primary-600 border-top border-gray-100 hover-text-decoration-underline"> Lihat Semua </a>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Notification End -->
+                    
+                    <!-- Language Start -->
+                    <div class="dropdown">
+                        <button class="text-gray-500 w-40 h-40 bg-main-50 hover-bg-main-100 transition-2 rounded-circle text-xl flex-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="ph ph-globe"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu--md border-0 bg-transparent p-0">
+                            <div class="card border border-gray-100 rounded-12 box-shadow-custom">
+                                <div class="card-body">
+                                    <div class="max-h-270 overflow-y-auto scroll-sm pe-8">
+                                        <div class="form-check form-radio d-flex align-items-center justify-content-between ps-0 mb-16">
+                                          <label class="ps-0 form-check-label line-height-1 fw-medium text-secondary-light" for="indonesian"> 
+                                            <span class="text-black hover-bg-transparent hover-text-primary d-flex align-items-center gap-8"> 
+                                              <img src="assets/images/thumbs/flag3.png" alt="" class="w-32-px h-32-px border borde border-gray-100 rounded-circle flex-shrink-0">
+                                              <span class="text-15 fw-semibold mb-0">Indonesia</span>
+                                            </span>
+                                          </label>
+                                          <input class="form-check-input" type="radio" name="language" id="indonesian" checked>
+                                        </div>
+                                        <div class="form-check form-radio d-flex align-items-center justify-content-between ps-0 mb-16">
+                                          <label class="ps-0 form-check-label line-height-1 fw-medium text-secondary-light" for="english"> 
+                                            <span class="text-black hover-bg-transparent hover-text-primary d-flex align-items-center gap-8"> 
+                                              <img src="assets/images/thumbs/flag3.png" alt="" class="w-32-px h-32-px border borde border-gray-100 rounded-circle flex-shrink-0">
+                                              <span class="text-15 fw-semibold mb-0">English</span>
+                                            </span>
+                                          </label>
+                                          <input class="form-check-input" type="radio" name="language" id="english">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Language End -->
+                </div>
+
+
+                <!-- User Profile Start -->
+                <div class="dropdown">
+                    <button class="users arrow-down-icon border border-gray-200 rounded-pill p-4 d-inline-block pe-40 position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="position-relative">
+                            <img src="assets/images/thumbs/user-img.png" alt="Image" class="h-32 w-32 rounded-circle">
+                            <span class="activation-badge w-8 h-8 position-absolute inset-block-end-0 inset-inline-end-0"></span>
+                        </span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu--lg border-0 bg-transparent p-0">
+                        <div class="card border border-gray-100 rounded-12 box-shadow-custom">
+                            <div class="card-body">
+                                <div class="flex-align gap-8 mb-20 pb-20 border-bottom border-gray-100">
+                                    <img src="assets/images/thumbs/user-img.png" alt="" class="w-54 h-54 rounded-circle">
+                                    <div class="">
+                                        <h4 class="mb-0">Anita Wijaya</h4>
+                                        <p class="fw-medium text-13 text-gray-200">anita.wijaya@sekolah.id</p>
+                                    </div>
+                                </div>
+                                <ul class="max-h-270 overflow-y-auto scroll-sm pe-4">
+                                    <li class="mb-4">
+                                        <a href="setting.html" class="py-12 text-15 px-20 hover-bg-gray-50 text-gray-300 rounded-8 flex-align gap-8 fw-medium text-15">
+                                            <span class="text-2xl text-primary-600 d-flex"><i class="ph ph-gear"></i></span>
+                                            <span class="text">Pengaturan Akun</span>
+                                        </a>
+                                    </li>
+                                    <li class="mb-4">
+                                        <a href="pricing-plan.html" class="py-12 text-15 px-20 hover-bg-gray-50 text-gray-300 rounded-8 flex-align gap-8 fw-medium text-15">
+                                            <span class="text-2xl text-primary-600 d-flex"><i class="ph ph-chart-bar"></i></span>
+                                            <span class="text">Upgrade Paket</span>
+                                        </a>
+                                    </li>
+                                    <li class="mb-4">
+                                        <a href="performa-siswa.html" class="py-12 text-15 px-20 hover-bg-gray-50 text-gray-300 rounded-8 flex-align gap-8 fw-medium text-15">
+                                            <span class="text-2xl text-primary-600 d-flex"><i class="ph ph-chart-line-up"></i></span>
+                                            <span class="text">Aktivitas Harian</span>
+                                        </a>
+                                    </li>
+                                    <li class="pt-8 border-top border-gray-100">
+                                        <a href="sign-in.html" class="py-12 text-15 px-20 hover-bg-danger-50 text-gray-300 hover-text-danger-600 rounded-8 flex-align gap-8 fw-medium text-15">
+                                            <span class="text-2xl text-danger-600 d-flex"><i class="ph ph-sign-out"></i></span>
+                                            <span class="text">Keluar</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- User Profile End -->
+
+            </div>
+        </div>
+
+        
+        <div class="dashboard-body">
+            <div class="row mb-24">
+                <div class="col-12">
+                    <div class="flex-between flex-wrap gap-16">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-0">
+                                <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Soal AI</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <div class="breadcrumb-with-buttons mb-24 flex-between flex-wrap gap-8">
+                <!-- Title -->
+                <div>
+                    <h4 class="mb-0">Soal Latihan AI</h4>
+                    <p class="text-muted mt-1">Daftar soal latihan yang dihasilkan dari rekaman Anda</p>
+                </div>
+                
+                <!-- Filter & Actions -->
+                <div class="flex-align gap-8 flex-wrap">
+                    <div class="position-relative text-gray-500 flex-align gap-4 text-13">
+                        <span class="text-inherit">Filter: </span>
+                        <div class="flex-align text-gray-500 text-13 border border-gray-100 rounded-4 ps-20 focus-border-main-600 bg-white">
+                            <span class="text-lg"><i class="ph ph-funnel-simple"></i></span>
+                            <select class="form-control ps-8 pe-20 py-16 border-0 text-inherit rounded-4 text-center">
+                                <option value="1" selected>Semua</option>
+                                <option value="2">Fisika</option>
+                                <option value="3">Matematika</option>
+                                <option value="4">Kimia</option>
+                                <option value="5">Biologi</option>
+                                <option value="6">Bahasa Inggris</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- soal_list.html -->
+            <div class="row g-4">
+                {% for transkrip in transkrip_list %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100">
+                    <div class="position-relative">
+                        <div class="bg-secondary text-white p-4 d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <i class="ph ph-clipboard-text text-white me-2" style="font-size: 32px;"></i>
+                            <h5 class="mb-0 text-white">{{ transkrip.name }}</h5>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted mb-3">{{ transkrip.teks[:100] }}...</p>
+                        <div class="mb-3">
+                        <small class="text-muted">Tanggal: <strong>{{ transkrip.created_at.strftime('%d %B %Y') }}</strong></small><br>
+                        <small class="text-muted">User ID: <strong>{{ transkrip.user_id }}</strong></small>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('transkrip.edit_transkrip', transkrip_id=transkrip.id) }}" class="btn btn-sm btn-outline-main">
+                            <i class="ph ph-pencil-line me-1"></i> Edit
+                        </a>
+                        <a href="#" class="btn btn-sm btn-main">
+                            <i class="ph ph-eye me-1"></i> Detail
+                        </a>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Pagination -->
+            <div class="d-flex justify-content-center mt-4">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        <li class="page-item active">
+                            <a class="page-link h-44 w-44 flex-center text-15 rounded-8 fw-medium" href="#">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link h-44 w-44 flex-center text-15 rounded-8 fw-medium" href="#">2</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <!-- Preview Modal -->
+            <div class="modal fade" id="previewModal1" tabindex="-1" aria-labelledby="previewModalLabel1" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="previewModalLabel1">Pratinjau Soal: Bab 3 - Fisika Dasar</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between mb-3">
+                                    <h5>Soal Latihan Fisika Dasar</h5>
+                                    <span class="badge bg-success">Fisika</span>
+                                </div>
+                                <div class="bg-light p-3 rounded mb-3">
+                                    <p class="mb-1"><strong>Jumlah Soal:</strong> 20 soal</p>
+                                    <p class="mb-1"><strong>Tipe Soal:</strong> Pilihan Ganda</p>
+                                    <p class="mb-1"><strong>Tingkat Kesulitan:</strong> Menengah</p>
+                                    <p class="mb-1"><strong>Waktu:</strong> 60 menit</p>
+                                    <p class="mb-0"><strong>Kelas:</strong> 10A</p>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h6 class="fw-bold">Contoh Soal:</h6>
+                                
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <p class="fw-bold">Soal 1:</p>
+                                        <p>Hukum I Newton menyatakan bahwa sebuah benda akan tetap diam atau bergerak dengan kecepatan konstan kecuali:</p>
+                                        <div class="ms-3">
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="radio" name="q1" id="q1a">
+                                                <label class="form-check-label" for="q1a">
+                                                    Ada gaya gravitasi yang bekerja padanya
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="radio" name="q1" id="q1b">
+                                                <label class="form-check-label" for="q1b">
+                                                    Ada resultan gaya yang bekerja padanya
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="radio" name="q1" id="q1c">
+                                                <label class="form-check-label" for="q1c">
+                                                    Benda tersebut berada di ruang hampa
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="q1" id="q1d">
+                                                <label class="form-check-label" for="q1d">
+                                                    Benda tersebut memiliki massa yang sangat besar
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <p class="fw-bold">Soal 2:</p>
+                                        <p>Sebuah benda bermassa 2 kg diberi gaya sebesar 10 N. Berapakah percepatan yang dialami benda tersebut?</p>
+                                        <div class="ms-3">
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="radio" name="q2" id="q2a">
+                                                <label class="form-check-label" for="q2a">
+                                                    5 m/s²
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="radio" name="q2" id="q2b">
+                                                <label class="form-check-label" for="q2b">
+                                                    20 m/s²
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="radio" name="q2" id="q2c">
+                                                <label class="form-check-label" for="q2c">
+                                                    10 m/s²
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="q2" id="q2d">
+                                                <label class="form-check-label" for="q2d">
+                                                    2 m/s²
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <p class="fw-bold">Soal 3:</p>
+                                        <p>Energi kinetik sebuah benda bergantung pada:</p>
+                                        <div class="ms-3">
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="radio" name="q3" id="q3a">
+                                                <label class="form-check-label" for="q3a">
+                                                    Massa dan kecepatan
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="radio" name="q3" id="q3b">
+                                                <label class="form-check-label" for="q3b">
+                                                    Massa dan percepatan
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="radio" name="q3" id="q3c">
+                                                <label class="form-check-label" for="q3c">
+                                                    Kecepatan dan waktu
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="q3" id="q3d">
+                                                <label class="form-check-label" for="q3d">
+                                                    Gaya dan jarak
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <p class="text-center text-muted">... dan 17 soal lainnya.</p>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                            <a href="detail-soal.html" class="btn btn-main">
+                                <i class="ph ph-pencil-line me-1"></i> Akses Soal
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="dashboard-footer">
+            <div class="flex-between flex-wrap gap-16">
+                <p class="text-gray-300 text-13 fw-normal"> &copy; Copyright SmartNote 2025, All Right Reserved</p>
+                <div class="flex-align flex-wrap gap-16">
+                    <a href="#" class="text-gray-300 text-13 fw-normal hover-text-main-600 hover-text-decoration-underline">Lisensi</a>
+                    <a href="#" class="text-gray-300 text-13 fw-normal hover-text-main-600 hover-text-decoration-underline">Dukungan</a>
+                    <a href="#" class="text-gray-300 text-13 fw-normal hover-text-main-600 hover-text-decoration-underline">Bantuan</a>
+                    <a href="#" class="text-gray-300 text-13 fw-normal hover-text-main-600 hover-text-decoration-underline">FAQ</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- jQuery JS -->
+    <script src="{{ url_for('static', filename='assets/js/jquery-3.7.1.min.js') }}"></script>
+    <!-- Bootstrap Bundle JS -->
+    <script src="{{ url_for('static', filename='assets/js/boostrap.bundle.min.js') }}"></script>
+    <!-- Phosphor JS -->
+    <script src="{{ url_for('static', filename='assets/js/phosphor-icon.js') }}"></script>
+    <!-- File Upload -->
+    <script src="{{ url_for('static', filename='assets/js/file-upload.js') }}"></script>
+    <!-- Plyr -->
+    <script src="{{ url_for('static', filename='assets/js/plyr.js') }}"></script>
+    <!-- DataTables (CDN - tidak perlu diubah) -->
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+    <!-- jQuery UI -->
+    <script src="{{ url_for('static', filename='assets/js/jquery-ui.js') }}"></script>
+    <!-- Editor Quill -->
+    <script src="{{ url_for('static', filename='assets/js/editor-quill.js') }}"></script>
+    <!-- ApexCharts -->
+    <script src="{{ url_for('static', filename='assets/js/apexcharts.min.js') }}"></script>
+    <!-- Calendar -->
+    <script src="{{ url_for('static', filename='assets/js/calendar.js') }}"></script>
+    <!-- jVectorMap -->
+    <script src="{{ url_for('static', filename='assets/js/jquery-jvectormap-2.0.5.min.js') }}"></script>
+    <!-- jVectorMap World -->
+    <script src="{{ url_for('static', filename='assets/js/jquery-jvectormap-world-mill-en.js') }}"></script>
+    <!-- Main JS -->
+    <script src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
+
+</body>
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz for Student</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles -->
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --accent-color: #e74c3c;
+            --light-bg: #f8f9fa;
+            --border-radius: 8px;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding-bottom: 2rem;
+        }
+        
+        .quiz-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+        }
+        
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .quiz-header h1 {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .question-card {
+            background-color: var(--light-bg);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .choices-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .choice-item {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .choice-item:hover {
+            border-color: var(--primary-color);
+        }
+        
+        .choice-item input[type="radio"] {
+            margin-right: 10px;
+        }
+        
+        .choice-label {
+            font-weight: 500;
+            margin-right: 8px;
+        }
+        
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 0.75rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            margin-top: 1rem;
+            width: 100%;
+        }
+        
+        .submit-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .progress-container {
+            margin-bottom: 2rem;
+        }
+        
+        .progress {
+            height: 0.5rem;
+            border-radius: 1rem;
+        }
+        
+        .question-number {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        /* Custom radio buttons */
+        .custom-radio input[type="radio"] {
+            display: none;
+        }
+        
+        .custom-radio input[type="radio"] + label {
+            position: relative;
+            padding-left: 30px;
+            cursor: pointer;
+            display: block;
+            margin: 0;
+            width: 100%;
+        }
+        
+        .custom-radio input[type="radio"] + label:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 2px;
+            width: 20px;
+            height: 20px;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            background: #fff;
+        }
+        
+        .custom-radio input[type="radio"]:checked + label:after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 7px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--primary-color);
+        }
+        
+        .custom-radio input[type="radio"]:checked + label {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .custom-radio input[type="radio"]:checked + label:before {
+            border-color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="quiz-container">
+            <div class="quiz-header">
+                <h1>{{ quiz.title }}</h1>
+                <p class="text-muted">Answer all questions and submit your answers</p>
+            </div>
+            
+            <div class="progress-container">
+                <div class="d-flex justify-content-between mb-1">
+                    <span>Your progress</span>
+                    <span id="progress-text">0/{{ soal_data|length }}</span>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar bg-primary" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="progress-bar"></div>
+                </div>
+            </div>
+            
+            <form action="{{ url_for('quizz.submit_answers', quiz_id=quiz.id) }}" method="POST">
+                {% for soal in soal_data %}
+                    <div class="question-card" id="question-{{ loop.index }}">
+                        <div class="question-text">
+                            <span class="question-number">{{ loop.index }}</span>
+                            {{ soal.pertanyaan }}
+                        </div>
+                        <ul class="choices-list">
+                            {% for choice in soal.pilihan %}
+                                <li class="choice-item">
+                                    <div class="custom-radio">
+                                        <input type="radio" id="q{{ soal.id }}_{{ choice.label }}" name="question_{{ soal.id }}" value="{{ choice.label }}" class="quiz-option">
+                                        <label for="q{{ soal.id }}_{{ choice.label }}">
+                                            <span class="choice-label">{{ choice.label }}.</span> {{ choice.text }}
+                                        </label>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endfor %}
+                
+                <div class="d-grid gap-2">
+                    <button type="submit" class="submit-btn">Submit Answers</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS (optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Progress tracker script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const radioButtons = document.querySelectorAll('.quiz-option');
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            const totalQuestions = {{ soal_data|length }};
+            
+            function updateProgress() {
+                const answered = document.querySelectorAll('.quiz-option:checked').length;
+                const percentage = (answered / totalQuestions) * 100;
+                progressBar.style.width = percentage + '%';
+                progressText.textContent = answered + '/' + totalQuestions;
+            }
+            
+            radioButtons.forEach(button => {
+                button.addEventListener('change', updateProgress);
+            });
+        });
+    </script>
+</body>
+</html>

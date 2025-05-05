@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>SmartNote - Daftar Rangkuman Materi</title>
+    
+        <!-- Favicon -->
+        <link rel="shortcut icon" href="{{ url_for('static', filename='assets/images/logo/favicon.png') }}">
+    
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/bootstrap.min.css') }}">
+    
+        <!-- Phosphor Icons -->
+        <link href="https://unpkg.com/phosphor-icons@1.4.2/src/css/icons.min.css" rel="stylesheet">
+    
+        <!-- DataTables -->
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
+    
+        <!-- Full Calendar -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/full-calendar.css') }}">
+    
+        <!-- jQuery UI -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/jquery-ui.css') }}">
+    
+        <!-- Quill Editor -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/editor-quill.css') }}">
+    
+        <!-- Apex Charts -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/apexcharts.css') }}">
+    
+        <!-- Calendar -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/calendar.css') }}">
+    
+        <!-- jVector Map -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/jquery-jvectormap-2.0.5.css') }}">
+    
+        <!-- Main CSS -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/main.css') }}">
+        <!-- Phosphor Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.0.3/src/regular/style.min.css">
+        
+        <style>
+          .card-summary {
+            transition: transform 0.3s;
+            border-radius: 12px;
+            overflow: hidden;
+          }
+          .card-summary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+          }
+          .card-title {
+            color: #2c3e50;
+            font-weight: 600;
+          }
+          .badge {
+            font-weight: 500;
+            padding: 0.5em 0.8em;
+          }
+          .summary-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: #6366f1;
+            color: white;
+          }
+          .featured-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+          }
+        </style>
+    </head>
+    
+<body>
+  <!--==================== Preloader Start ====================-->
+  <div class="preloader">
+    <div class="loader"></div>
+  </div>
+  <!--==================== Preloader End ====================-->
+
+  <!--==================== Sidebar Overlay End ====================-->
+  <div class="side-overlay"></div>
+  <!--==================== Sidebar Overlay End ====================-->
+
+  <!-- ============================ Sidebar Start ============================ -->
+  {% include 'components/sidebar.html' %}
+  <!-- ============================ Sidebar End  ============================ -->
+
+  <div class="dashboard-main-wrapper">
+    <div class="top-navbar flex-between gap-16">
+      <div class="flex-align gap-16">
+        <!-- Toggle Button Start -->
+        <button type="button" class="toggle-btn d-xl-none d-flex text-26 text-gray-500"><i class="ph ph-list"></i></button>
+        <!-- Toggle Button End -->
+        
+        <form action="#" class="w-350 d-sm-block d-none">
+          <div class="position-relative">
+            <button type="submit" class="input-icon text-xl d-flex text-gray-100 pointer-event-none"><i class="ph ph-magnifying-glass"></i></button> 
+            <input type="text" class="form-control ps-40 h-40 border-transparent focus-border-main-600 bg-main-50 rounded-pill placeholder-15" placeholder="Cari rangkuman...">
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="dashboard-body">
+      <div class="breadcrumb-with-buttons mb-24 flex-between flex-wrap gap-8">
+        <!-- Breadcrumb Start -->
+        <div class="breadcrumb mb-24">
+          <ul class="flex-align gap-4">
+            <li><a href="{{ url_for('auth.dashboard') }}" class="text-gray-200 fw-normal text-15 hover-text-main-600">Dashboard</a></li>
+            <li><span class="text-gray-500 fw-normal d-flex"><i class="ph ph-caret-right"></i></span></li>
+            <li><span class="text-main-600 fw-normal text-15">Rangkuman Materi</span></li>
+          </ul>
+        </div>
+        <!-- Breadcrumb End -->
+
+        <!-- Right Filter Start -->
+        <div class="flex-align gap-8 flex-wrap">
+          <div class="position-relative text-gray-500 flex-align gap-4 text-13">
+            <span class="text-inherit">Filter: </span>
+            <div class="flex-align text-gray-500 text-13 border border-gray-100 rounded-4 ps-20 focus-border-main-600 bg-white">
+              <span class="text-lg"><i class="ph ph-funnel-simple"></i></span>
+              <select class="form-control ps-8 pe-20 py-16 border-0 text-inherit rounded-4 text-center">
+                <option value="1" selected>Semua</option>
+                <option value="2">Terbaru</option>
+                <option value="3">Terlama</option>
+                <option value="4">Mata Pelajaran</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <!-- Right Filter End -->
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col-md-8">
+              <h2 class="mb-2">Rangkuman Materi</h2>
+              <p class="text-gray-300 mb-0">Daftar ringkasan dari transkrip rekaman pembelajaran Anda</p>
+            </div>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+              <a href="{{ url_for('auth.dashboard') }}" class="btn btn-outline-main">
+                <i class="ph ph-plus me-2"></i> back
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+     
+
+      <div class="row g-4">
+        {% for summary in summary_list %}
+        <div class="col-md-6 col-lg-4">
+          <div class="card card-summary h-100 border-0 shadow-sm position-relative">
+            {% if loop.index == 1 %}
+            <span class="featured-badge badge bg-warning text-dark">
+              <i class="ph ph-star-fill me-1"></i> Terbaru
+            </span>
+            {% endif %}
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-3">
+                <div class="summary-icon me-3">
+                  <i class="ph ph-note"></i>
+                </div>
+                <h5 class="card-title mb-0">
+                  {{ summary.judul_rangkuman if summary.judul_rangkuman else 'Tanpa Judul' }}
+                </h5>
+              </div>
+              <p class="card-text text-muted">
+                {{ summary.pengertian_utama if summary.pengertian_utama else 'Tidak ada pengertian.' }}
+              </p>
+
+              <div class="d-flex gap-2 mb-3 flex-wrap">
+                <span class="badge bg-main-50 text-main-600">
+                  <i class="ph ph-calendar me-1"></i>
+                  {{ summary.created_at.strftime('%d %b %Y') }}
+                </span>
+                <span class="badge bg-main-50 text-main-600">
+                  <i class="ph ph-file-text me-1"></i>
+                  {{ summary.data_summary[:20] }}...
+                </span>
+              </div>
+            </div>
+            <div class="card-footer bg-white border-0">
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="text-gray-200 text-13">
+                  <i class="ph ph-clock me-1"></i> {{ summary.created_at.strftime('%H:%M') }}
+                </span>
+                <div class="d-flex gap-2">
+                  <a href="{{ url_for('summarize.show_summary', summarize_id=summary.id) }}"
+                    class="btn btn-main btn-sm">
+                    <i class="ph ph-eye me-1"></i> Buka
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <div class="col-12">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body text-center py-5">
+              <div class="mb-4">
+                <i class="ph ph-file-text text-gray-200" style="font-size: 64px;"></i>
+              </div>
+              <h5 class="text-gray-300 mb-3">Belum Ada Rangkuman</h5>
+              <p class="text-gray-200 mb-4">Anda belum memiliki rangkuman dari rekaman pembelajaran.</p>
+              <a href="{{ url_for('auth.dashboard') }}" class="btn btn-main">
+                <i class="ph ph-microphone me-2"></i> Mulai Merekam
+              </a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Pagination if needed -->
+      {% if summary_list and summary_list|length > 9 %}
+      <div class="card-footer flex-between flex-wrap mt-4">
+        <span class="text-gray-900">Menampilkan 1 hingga {{ summary_list|length }} dari {{ summary_list|length }} entri</span>
+        <ul class="pagination flex-align flex-wrap">
+          <li class="page-item active">
+            <a class="page-link h-44 w-44 flex-center text-15 rounded-8 fw-medium" href="#">1</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link h-44 w-44 flex-center text-15 rounded-8 fw-medium" href="#">2</a>
+          </li>
+        </ul>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="dashboard-footer">
+      <div class="flex-between flex-wrap gap-16">
+        <p class="text-gray-300 text-13 fw-normal"> &copy; Copyright SmartNote 2025, All Right Reserved</p>
+        <div class="flex-align flex-wrap gap-16">
+          <a href="#" class="text-gray-300 text-13 fw-normal hover-text-main-600 hover-text-decoration-underline">Lisensi</a>
+          <a href="#" class="text-gray-300 text-13 fw-normal hover-text-main-600 hover-text-decoration-underline">Dukungan</a>
+          <a href="#" class="text-gray-300 text-13 fw-normal hover-text-main-600 hover-text-decoration-underline">Bantuan</a>
+          <a href="#" class="text-gray-300 text-13 fw-normal hover-text-main-600 hover-text-decoration-underline">FAQ</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Custom JS for sidebar toggle -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Toggle sidebar
+      const toggleBtn = document.querySelector('.toggle-btn');
+      const sidebarOverlay = document.querySelector('.side-overlay');
+      
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', function() {
+          document.body.classList.toggle('sidebar-open');
+        });
+      }
+      
+      if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', function() {
+          document.body.classList.remove('sidebar-open');
+        });
+      }
+    });
+  </script>
+</body>
+</html>
