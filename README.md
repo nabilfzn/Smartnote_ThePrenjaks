@@ -8,7 +8,20 @@ Sistem ini secara instan mengubah rekaman menjadi **ringkasan** dan **modul pemb
 
 ---
 
+## 🚀 Fitur Utama
+
+- ✅ User **Signup & Login**
+- 🎤 Rekam suara dengan perangkat SmartNote
+- 📝 Transkripsi otomatis audio menjadi teks
+- ✏️ Edit hasil transkripsi
+- 📚 Buat rangkuman atau modul dari transkripsi
+- 🧠 Buat dan edit quiz berbasis AI
+- 👩‍🏫 Guru membagikan quiz ke siswa melalui ID
+- 👨‍🎓 Siswa mengerjakan quiz dan mendapat feedback serta rekomendasi belajar
+
 ## 🚀 Cara Menggunakan SmartNote
+---
+
 
 ### 1. Pastikan Versi Python
 Gunakan **Python 3.10** atau versi yang sesuai dengan dependensi dalam proyek ini.
@@ -71,7 +84,99 @@ python app.py
 <br>
 
 
-## 🕹️ Langkah Menggunakan Aplikasi
+## 🕹️ Alur Menggunakan Aplikasi
+## 🧭 Alur Penggunaan
+
+### 1. **Autentikasi Pengguna**
+- Pengguna membuat akun melalui halaman **Signup**
+- Masuk menggunakan akun yang sudah terdaftar (**Login**)
+
+---
+
+### 2. **Rekam & Transkripsi Audio**
+- Masuk ke halaman **Upload Audio**
+- Rekam suara langsung melalui perangkat SmartNote
+- Aplikasi akan mentranskripsi audio secara otomatis
+- Hasil transkrip bisa dilihat di halaman **List Audio** (Sidebar)
+
+---
+
+### 3. **Edit Transkrip**
+- Buka halaman **Transkrip** dari sidebar
+- Pilih salah satu transkrip untuk **diedit** jika ada kesalahan
+
+---
+
+### 4. **Buat Modul/Rangkuman**
+- Dari halaman transkrip, pilih transkrip yang akan dibuat modul
+- Klik tombol **Buat Modul**
+- Modul yang sudah dibuat akan muncul di halaman **List Modul**
+
+---
+
+### 5. **Buat & Edit Quiz**
+- Dari modul, klik **Buat Quiz**
+- Quiz akan digenerate oleh AI dari isi modul
+- Edit soal/opsi quiz jika dibutuhkan pada halaman **Quiz**
+
+---
+
+### 6. **Akses Guru**
+- Guru bisa melihat kunci jawaban quiz
+- ID quiz akan terlihat di URL, misalnya: `/quiz/42`
+- Guru membagikan ID tersebut ke siswa
+
+---
+
+### 7. **Akses Siswa**
+- Siswa klik menu **Kerjakan Quiz**
+- Masukkan ID quiz yang dibagikan guru (misalnya `42`)
+- Siswa menjawab soal
+- Setelah selesai, siswa akan mendapat:
+  - Feedback benar/salah
+  - Rekomendasi belajar dari AI
+
+---
+
+## ⚙️ Teknologi yang Digunakan
+
+- Python + Flask
+- SQLAlchemy (ORM)
+- Jinja2 (Template)
+- HTML/CSS/JS
+- OpenAI API (untuk AI feedback dan generate quiz)
+- Google Speech-to-Text API (transkripsi audio)
+
+---
+
+## 📂 Struktur Proyek 
+
+SMARTNOTE_FINAL/
+├── app.py
+├── init_db.py
+├── requirements.txt
+├── README.md
+├── .env
+├── instance/
+│   └── smartnote.db
+├── app/
+│   ├── __init__.py
+│   ├── models.py
+│   ├── routes/
+│   │   ├── auth.py
+│   │   ├── conn.py
+│   │   ├── modul.py
+│   │   ├── quiz.py
+│   │   ├── summarize.py
+│   │   ├── transkrip.py
+│   │   └── upload.py
+│   ├── static/
+│   │   └── suara_guru.mp3
+│   └── templates/
+│       └── components/
+│           ├── sidebar.html
+│           ├── arsip-rekaman.html
+│           └── arsip-transkrip.html
 
 
 
