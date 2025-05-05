@@ -144,9 +144,7 @@ python app.py
 - SQLAlchemy (ORM)
 - Jinja2 (Template)
 - HTML/CSS/JS
-- OpenAI API (untuk AI feedback dan generate quiz)
-- Google Speech-to-Text API (transkripsi audio)
-
+- GEMINI API (untuk AI transcribe, modul, rangkuman, feedback, generate quiz)
 ---
 
 ```bash
@@ -180,5 +178,4 @@ SMARTNOTE_FINAL/
 │           └── arsip-transkrip.html
 ```
 
-## Desain Sistem Smartnote
 
