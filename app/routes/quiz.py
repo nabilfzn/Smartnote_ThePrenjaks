@@ -206,7 +206,7 @@ def generate(modul_id):
         return render_template('form_quis.html', modul=modul, isi_modul=isi_modul)
 
     # Jika POST, baru proses generate
-    jumlah_soal = int(request.form.get('jumlahSoal', 10))
+    jumlah_soal = int(request.form.get('jumlahSoal', 20))
     modul_content = request.form.get('modulText')  # Ambil dari textarea
 
     # Cek apakah request adalah AJAX (XHR)
