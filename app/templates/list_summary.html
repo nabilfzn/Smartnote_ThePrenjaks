@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>SmartNote - Daftar Rangkuman Materi</title>
+    
+        <!-- Favicon -->
+        <link rel="shortcut icon" href="{{ url_for('static', filename='assets/images/logo/favicon.png') }}">
+    
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/bootstrap.min.css') }}">
+    
+        <!-- Phosphor Icons -->
+        <link href="https://unpkg.com/phosphor-icons@1.4.2/src/css/icons.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.0.3/src/regular/style.min.css">
+    
+        <!-- DataTables -->
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
+    
+        <!-- Full Calendar -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/full-calendar.css') }}">
+    
+        <!-- jQuery UI -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/jquery-ui.css') }}">
+    
+        <!-- Quill Editor -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/editor-quill.css') }}">
+    
+        <!-- Apex Charts -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/apexcharts.css') }}">
+    
+        <!-- Calendar -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/calendar.css') }}">
+    
+        <!-- jVector Map -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/jquery-jvectormap-2.0.5.css') }}">
+    
+        <!-- Main CSS -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/main.css') }}">
+        
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        
+        <style>
+          :root {
+            --primary-color: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --secondary-color: #10b981;
+            --accent-color: #f59e0b;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+            --gray-light: #e2e8f0;
+            --gray-medium: #94a3b8;
+            --gray-dark: #64748b;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+          }
+          
+          body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f9fafb;
+            color: var(--dark-color);
+          }
+          
+          .preloader {
+            background-color: var(--primary-color);
+          }
+          
+          .dashboard-main-wrapper {
+            background-color: #f9fafb;
+          }
+          
+          .top-navbar {
+            background-color: white;
+            box-shadow: var(--shadow-sm);
+            padding: 0.75rem 1.5rem;
+            border-bottom: 1px solid var(--gray-light);
+          }
+          
+          .breadcrumb {
+            margin-bottom: 0 !important;
+          }
+          
+          .breadcrumb a {
+            color: var(--gray-dark);
+            transition: color 0.2s;
+          }
+          
+          .breadcrumb a:hover {
+            color: var(--primary-color);
+            text-decoration: none;
+          }
+          
+          .breadcrumb .text-main-600 {
+            color: var(--primary-color);
+            font-weight: 500;
+          }
+          
+          .dashboard-body {
+            padding: 1.5rem;
+          }
+          
+          .card {
+            border: none;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            overflow: hidden;
+          }
+          
+          .card:hover {
+            box-shadow: var(--shadow-md);
+          }
+          
+          .card-summary {
+            height: 100%;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-radius: var(--radius-md);
+            background: white;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+          }
+          
+          .card-summary:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+          }
+          
+          .card-body {
+            padding: 1.25rem;
+            flex: 1;
+          }
+          
+          .card-footer {
+            padding: 1rem 1.25rem;
+            background-color: white;
+            border-top: 1px solid var(--gray-light);
+          }
+          
+          .card-title {
+            color: var(--dark-color);
+            font-weight: 600;
+            font-size: 1rem;
+            line-height: 1.4;
+          }
+          
+          .btn {
+            font-weight: 500;
+            padding: 0.4rem 1rem;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+          }
+          
+          .btn-main {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+          }
+          
+          .btn-main:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+            color: white;
+          }
+          
+          .btn-outline-main {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+          }
+          
+          .btn-outline-main:hover {
+            background-color: var(--primary-color);
+            color: white;
+          }
+          
+          .btn-sm {
+            padding: 0.35rem 0.7rem;
+            font-size: 0.8rem;
+          }
+          
+          .summary-icon {
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+          }
+          
+          .featured-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: var(--radius-sm);
+            padding: 0.35em 0.6em;
+            font-size: 0.7rem;
+            font-weight: 500;
+            z-index: 1;
+          }
+          
+          .text-gray-200 {
+            color: var(--gray-medium);
+            font-size: 0.875rem;
+          }
+          
+          .text-gray-300 {
+            color: var(--gray-dark);
+          }
+          
+          .dashboard-footer {
+            padding: 1rem 1.5rem;
+            background-color: white;
+            border-top: 1px solid var(--gray-light);
+          }
+          
+          .empty-state {
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+          }
+          
+          .empty-state-icon {
+            font-size: 3.5rem;
+            color: var(--gray-medium);
+            margin-bottom: 1.25rem;
+          }
+          
+          /* Responsive adjustments */
+          @media (max-width: 768px) {
+            .dashboard-body {
+              padding: 1rem;
+            }
+            
+            .card-summary {
+              margin-bottom: 0.5rem;
+            }
+          }
+          
+          /* Animation for cards */
+          @keyframes fadeInUp {
+            from {
+              opacity: 0;
+              transform: translateY(20px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+          
+          .card-summary {
+            animation: fadeInUp 0.4s ease forwards;
+          }
+          
+          .row.g-4 {
+            --bs-gutter-x: 1rem;
+            --bs-gutter-y: 1rem;
+          }
+        </style>
+    </head>
+    
+<body>
+  <!--==================== Preloader Start ====================-->
+  <div class="preloader">
+    <div class="loader"></div>
+  </div>
+  <!--==================== Preloader End ====================-->
+
+  <!--==================== Sidebar Overlay End ====================-->
+  <div class="side-overlay"></div>
+  <!--==================== Sidebar Overlay End ====================-->
+
+  <!-- ============================ Sidebar Start ============================ -->
+  {% include 'components/sidebar.html' %}
+  <!-- ============================ Sidebar End  ============================ -->
+
+  <div class="dashboard-main-wrapper">
+    <div class="top-navbar">
+      <div class="d-flex align-items-center">
+        <!-- Toggle Button Start -->
+        <button type="button" class="toggle-btn btn d-xl-none d-flex"><i class="ph ph-list"></i></button>
+        <!-- Toggle Button End -->
+      </div>
+    </div>
+
+    <div class="dashboard-body">
+      <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+        <!-- Breadcrumb Start -->
+        <div class="breadcrumb">
+          <ul class="d-flex align-items-center gap-2 mb-0 p-0" style="list-style: none;">
+            <li><a href="{{ url_for('auth.dashboard') }}" class="text-decoration-none">Dashboard</a></li>
+            <li><span class="d-flex text-gray-200"><i class="ph ph-caret-right"></i></span></li>
+            <li><span class="text-main-600">Rangkuman Materi</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <div class="card-body py-3">
+          <div class="row align-items-center">
+            <div class="col-md-8">
+              <h2 class="mb-0 fw-bold" style="font-size: 1.5rem;">Rangkuman Materi</h2>
+            </div>
+            <div class="col-md-4 text-md-end mt-2 mt-md-0">
+              <a href="{{ url_for('auth.dashboard') }}" class="btn btn-outline-main btn-sm">
+                <i class="ph ph-arrow-left me-1"></i> Kembali
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        {% for summary in summary_list %}
+        <div class="col-md-6 col-lg-4">
+          <div class="card card-summary position-relative">
+            {% if loop.index == 1 %}
+            <span class="featured-badge">
+              <i class="ph ph-star-fill me-1"></i> Terbaru
+            </span>
+            {% endif %}
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-0">
+                <div class="summary-icon me-3">
+                  <i class="ph ph-note"></i>
+                </div>
+                <h5 class="card-title mb-0">
+                  {{ summary.judul_rangkuman if summary.judul_rangkuman else 'Tanpa Judul' }}
+                </h5>
+              </div>
+            </div>
+            <div class="card-footer border-0">
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="text-gray-200">
+                  <i class="ph ph-calendar me-1"></i> {{ summary.created_at.strftime('%d %b %Y') }}
+                </span>
+                <a href="{{ url_for('summarize.show_summary', summarize_id=summary.id) }}"
+                  class="btn btn-main btn-sm">
+                  <i class="ph ph-eye me-1"></i> Buka
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <div class="col-12">
+          <div class="card border-0 empty-state">
+            <div class="card-body text-center py-5">
+              <div class="empty-state-icon">
+                <i class="ph ph-file-text"></i>
+              </div>
+              <h5 class="mb-3">Belum Ada Rangkuman</h5>
+              <a href="{{ url_for('auth.dashboard') }}" class="btn btn-main">
+                <i class="ph ph-microphone me-2"></i> Mulai Merekam
+              </a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Pagination if needed -->
+      {% if summary_list and summary_list|length > 9 %}
+      <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap">
+        <span class="text-gray-300">Menampilkan 1 hingga {{ summary_list|length }} dari {{ summary_list|length }} entri</span>
+        <nav aria-label="Page navigation">
+          <ul class="pagination mb-0">
+            <li class="page-item disabled">
+              <a class="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item">
+              <a class="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="dashboard-footer">
+      <div class="d-flex justify-content-center">
+        <p class="text-gray-200 mb-0">&copy; Copyright SmartNote 2025</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Custom JS for sidebar toggle and animations -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Toggle sidebar
+      const toggleBtn = document.querySelector('.toggle-btn');
+      const sidebarOverlay = document.querySelector('.side-overlay');
+      
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', function() {
+          document.body.classList.toggle('sidebar-open');
+        });
+      }
+      
+      if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', function() {
+          document.body.classList.remove('sidebar-open');
+        });
+      }
+      
+      // Hide preloader
+      setTimeout(function() {
+        const preloader = document.querySelector('.preloader');
+        if (preloader) {
+          preloader.style.opacity = '0';
+          setTimeout(function() {
+            preloader.style.display = 'none';
+          }, 300);
+        }
+      }, 500);
+      
+      // Animate cards on scroll
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      document.querySelectorAll('.card-summary').forEach(card => {
+        observer.observe(card);
+      });
+    });
+  </script>
+</body>
+</html>

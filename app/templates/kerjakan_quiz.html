@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartNote - Kerjakan Quiz</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='assets/images/logo/favicon.png') }}">
+
+    <!-- CSS Libraries -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.0.3/src/regular/style.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/main.css') }}">
+
+    <style>
+        /* Custom styles for this page */
+        :root {
+            --animation-duration: 0.3s;
+            --border-radius-soft: 24px;
+            --box-shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+        
+        body {
+            background-color: #f9fafc;
+        }
+        
+        .quiz-header {
+            background: linear-gradient(135deg, var(--main-color-600), var(--main-color-700));
+            border-bottom: none;
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--border-radius-soft) var(--border-radius-soft) 0 0;
+        }
+        
+        .quiz-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 70%);
+            opacity: 0.8;
+            z-index: 0;
+        }
+        
+        .quiz-header h4 {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .quiz-icon-container {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, rgba(var(--main-color-rgb), 0.1), rgba(var(--main-color-rgb), 0.2));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 12px 25px rgba(var(--main-color-rgb), 0.15);
+            transition: all var(--animation-duration) ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .quiz-icon-container::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(45deg, 
+                transparent 40%, 
+                rgba(255, 255, 255, 0.1) 45%, 
+                rgba(255, 255, 255, 0.2) 50%, 
+                rgba(255, 255, 255, 0.1) 55%, 
+                transparent 60%);
+            z-index: 1;
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .quiz-card:hover .quiz-icon-container {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(var(--main-color-rgb), 0.25);
+        }
+        
+        .quiz-icon {
+            font-size: 2.75rem;
+            color: var(--main-color);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .info-card {
+            background-color: rgba(var(--main-color-rgb), 0.06);
+            border-radius: 16px;
+            transition: all var(--animation-duration) ease;
+            height: 100%;
+            border: none;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.03);
+        }
+        
+        .info-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--main-color-400), transparent);
+            border-radius: 3px;
+        }
+        
+        .info-card::after {
+            content: '';
+            position: absolute;
+            right: -20px;
+            bottom: -20px;
+            width: 80px;
+            height: 80px;
+            background-color: rgba(var(--main-color-rgb), 0.06);
+            border-radius: 50%;
+            z-index: 0;
+        }
+        
+        .info-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            background-color: rgba(var(--main-color-rgb), 0.09);
+        }
+        
+        .submit-btn {
+            transition: all var(--animation-duration) ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            border-radius: 50px;
+            padding: 14px 20px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+        
+        .submit-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255,255,255,0.2), rgba(255,255,255,0));
+            transition: all 0.6s ease;
+            z-index: -1;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(var(--main-color-rgb), 0.3);
+        }
+        
+        .submit-btn:hover::after {
+            left: 100%;
+        }
+        
+        /* Smooth flowing input style */
+        .form-control {
+            transition: all var(--animation-duration) ease;
+            border: none;
+            border-bottom: 2px solid rgba(var(--main-color-rgb), 0.2);
+            border-radius: 0;
+            padding: 12px 12px 12px 45px;
+            font-size: 1.05rem;
+            background-color: rgba(var(--main-color-rgb), 0.03);
+            box-shadow: none;
+        }
+        
+        .form-control:focus {
+            box-shadow: none;
+            transform: translateY(-1px);
+            border-bottom-color: var(--main-color);
+            background-color: rgba(var(--main-color-rgb), 0.05);
+        }
+        
+        .input-container {
+            position: relative;
+            margin-bottom: 25px;
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--main-color-500);
+            font-size: 1.25rem;
+            z-index: 2;
+        }
+        
+        .floating-label {
+            position: absolute;
+            left: 45px;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            color: #6c757d;
+            font-weight: normal;
+        }
+        
+        .form-control:focus + .floating-label,
+        .form-control:not(:placeholder-shown) + .floating-label {
+            top: 0px;
+            left: 10px;
+            font-size: 0.8rem;
+            color: var(--main-color);
+            font-weight: 500;
+        }
+        
+        .quiz-card {
+            transition: all var(--animation-duration) ease;
+            border-radius: var(--border-radius-soft);
+            overflow: hidden;
+            box-shadow: var(--box-shadow-soft);
+            border: none;
+        }
+        
+        .quiz-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08) !important;
+        }
+        
+        #quizId::placeholder {
+            opacity: 0;
+        }
+        
+        .info-section {
+            position: relative;
+            margin-top: 40px;
+        }
+        
+        .info-section::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: -20px;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--main-color-400), transparent);
+            transform: translateX(-50%);
+            border-radius: 50px;
+        }
+        
+        .alert {
+            transition: all var(--animation-duration) ease;
+            border-radius: 16px;
+            border: none;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+        
+        /* Dashboard improvements */
+        .dashboard-body {
+            background-color: #f9fafc;
+            position: relative;
+        }
+        
+        .dashboard-body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(180deg, 
+                rgba(var(--main-color-rgb), 0.05) 0%, 
+                rgba(var(--main-color-rgb), 0) 100%);
+            z-index: 0;
+        }
+        
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Wave Background for softer appearance */
+        .wave-bg {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 90px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z' fill='rgba(255, 255, 255, 0.4)'%3E%3C/path%3E%3C/svg%3E");
+            background-size: cover;
+            z-index: 0;
+        }
+        
+        /* Ripple animation for button click effect */
+        @keyframes ripple {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0;
+            }
+        }
+        
+        /* Shake animation for error feedback */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Sidebar Overlay -->
+    <div class="side-overlay"></div>
+
+    <!-- Sidebar -->
+    {% include 'components/sidebar.html' %}
+
+    <div class="dashboard-main-wrapper">
+        <!-- Top Navbar -->
+        <div class="top-navbar flex-between gap-16">
+            <div class="flex-align gap-16">
+                <!-- Toggle Button -->
+                <button type="button" class="toggle-btn d-xl-none d-flex text-26 text-gray-500">
+                    <i class="ph ph-list"></i>
+                </button>
+                
+                <!-- Search Form -->
+                <form class="w-350 d-sm-block d-none">
+                    <div class="position-relative">
+                        <button type="submit" class="input-icon text-xl d-flex text-gray-100 pointer-event-none">
+                            <i class="ph ph-magnifying-glass"></i>
+                        </button> 
+                        <input type="text" class="form-control ps-40 h-40 border-transparent focus-border-main-600 bg-main-50 rounded-pill placeholder-15" placeholder="Cari...">
+                    </div>
+                </form>
+            </div>
+
+            <!-- User Profile -->
+            <div class="flex-align gap-16">
+                <div class="dropdown">
+                    <button class="users arrow-down-icon border border-gray-200 rounded-pill p-4 d-inline-block pe-40 position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="position-relative">
+                            <img src="{{ url_for('static', filename='assets/images/thumbs/user-img.png') }}" alt="Profil Pengguna" class="h-32 w-32 rounded-circle">
+                            <span class="activation-badge w-8 h-8 position-absolute inset-block-end-0 inset-inline-end-0"></span>
+                        </span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu--lg border-0 bg-transparent p-0">
+                        <!-- User dropdown content here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Body -->
+        <div class="dashboard-body">
+            <div class="container py-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-md-8">
+                        <!-- Quiz Access Card -->
+                        <div class="card shadow-sm border-0 rounded-4 overflow-hidden quiz-card">
+                            <div class="card-header quiz-header text-center text-white rounded-top-16 py-4">
+                                <h4 class="mb-0 py-2 flex-align gap-8 justify-content-center">
+                                    <i class="ph ph-exam text-2xl"></i>
+                                    Kerjakan Quiz
+                                </h4>
+                            </div>
+                            <div class="card-body p-4 p-lg-5">
+                                <!-- Quiz Icon & Description -->
+                                <div class="text-center mb-4 fade-in">
+                                    <div class="quiz-icon-container mb-3">
+                                        <i class="ph ph-clipboard-text quiz-icon"></i>
+                                    </div>
+                                    <h5 class="text-main-600 mb-2">Mulai Mengerjakan Quiz</h5>
+                                    <p class="text-gray-600">Masukkan ID Quiz yang telah diberikan oleh guru Anda untuk mulai mengerjakan</p>
+                                </div>
+                                
+                                <!-- Quiz Form -->
+                                <form id="quizForm" class="mt-5">
+                                    <!-- Alert for errors -->
+                                    <div class="alert alert-danger d-none" id="errorAlert" role="alert">
+                                        <div class="flex-align gap-2">
+                                            <i class="ph ph-warning-circle"></i>
+                                            <span id="errorMessage">ID Quiz tidak boleh kosong</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Quiz ID Input with floating label -->
+                                    <div class="input-container">
+                                        <i class="ph ph-hash input-icon"></i>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="quizId" 
+                                               name="quizId" 
+                                               placeholder=" " 
+                                               autocomplete="off"
+                                               required>
+                                        <label for="quizId" class="floating-label">Masukkan ID Quiz</label>
+                                    </div>
+                                    
+                                    <!-- Submit Button -->
+                                    <div class="d-grid gap-2 mt-5">
+                                        <button type="submit" class="btn btn-main text-white submit-btn">
+                                            <span class="flex-center gap-2">
+                                                <i class="ph ph-play"></i>
+                                                Mulai Mengerjakan
+                                            </span>
+                                        </button>
+                                    </div>
+                                </form>
+
+                                <!-- Information Section -->
+                                <div class="mt-5 pt-4 border-top border-gray-100 info-section">
+                                    <h6 class="mb-3 text-center">Informasi Penting</h6>
+                                    <div class="row g-3">
+                                        <!-- Time Limit Info -->
+                                        <div class="col-md-6">
+                                            <div class="info-card p-3">
+                                                <div class="flex-align gap-2 mb-2">
+                                                    <i class="ph ph-timer text-main-600"></i>
+                                                    <h6 class="mb-0 text-sm fw-semibold">Batas Waktu</h6>
+                                                </div>
+                                                <p class="text-sm text-gray-600 mb-0">Setiap quiz memiliki batas waktu yang ditentukan oleh guru</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Warning Info -->
+                                        <div class="col-md-6">
+                                            <div class="info-card p-3">
+                                                <div class="flex-align gap-2 mb-2">
+                                                    <i class="ph ph-warning-circle text-main-600"></i>
+                                                    <h6 class="mb-0 text-sm fw-semibold">Jangan Keluar</h6>
+                                                </div>
+                                                <p class="text-sm text-gray-600 mb-0">Jangan tutup halaman saat sedang mengerjakan quiz</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- New: Focus Info -->
+                                        <div class="col-md-6">
+                                            <div class="info-card p-3">
+                                                <div class="flex-align gap-2 mb-2">
+                                                    <i class="ph ph-brain text-main-600"></i>
+                                                    <h6 class="mb-0 text-sm fw-semibold">Fokus</h6>
+                                                </div>
+                                                <p class="text-sm text-gray-600 mb-0">Tetap fokus dan jangan beralih ke aplikasi lain</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- New: Save Answer Info -->
+                                        <div class="col-md-6">
+                                            <div class="info-card p-3">
+                                                <div class="flex-align gap-2 mb-2">
+                                                    <i class="ph ph-check-circle text-main-600"></i>
+                                                    <h6 class="mb-0 text-sm fw-semibold">Simpan Jawaban</h6>
+                                                </div>
+                                                <p class="text-sm text-gray-600 mb-0">Jawaban akan otomatis tersimpan saat dipilih</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dashboard Footer -->
+        <div class="dashboard-footer">
+            <div class="flex-between flex-wrap gap-16">
+                <p class="text-gray-300 text-13 fw-normal">&copy; Copyright SmartNote 2025, All Right Reserved</p>
+                <div class="flex-align flex-wrap gap-16">
+                    <a href="#" class="text-gray-300 text-13 fw-normal hover-text-main-600 hover-text-decoration-underline">Lisensi</a>
+                    <a href="#" class="text-gray-300 text-13 fw-normal hover-text-main-600 hover-text-decoration-underline">Dukungan</a>
+                    <a href="#" class="text-gray-300 text-13 fw-normal hover-text-main-600 hover-text-decoration-underline">Bantuan</a>
+                    <a href="#" class="text-gray-300 text-13 fw-normal hover-text-main-600 hover-text-decoration-underline">FAQ</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="{{ url_for('static', filename='assets/js/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/phosphor-icon.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
+
+    <!-- Page Specific Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const quizForm = document.getElementById('quizForm');
+            const quizIdInput = document.getElementById('quizId');
+            const errorAlert = document.getElementById('errorAlert');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // Add wave background for softer appearance
+            const waveBg = document.createElement('div');
+            waveBg.classList.add('wave-bg');
+            document.querySelector('.card-body').appendChild(waveBg);
+            
+            // Initial animation with sequence for smoother entry
+            setTimeout(() => {
+                document.querySelector('.quiz-icon-container').classList.add('fade-in');
+            }, 300);
+            
+            setTimeout(() => {
+                document.querySelector('.quiz-icon-container').classList.add('pulse');
+            }, 800);
+            
+            // Focus the quiz ID input when page loads with slight delay for better UX
+            setTimeout(() => {
+                quizIdInput.focus();
+            }, 1000);
+            
+            // Form submission handler with improved validations
+            quizForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const quizId = quizIdInput.value.trim();
+                
+                // Validate quiz ID - empty check
+                if (!quizId) {
+                    showError('ID Quiz tidak boleh kosong');
+                    return;
+                }
+                
+                // Validate quiz ID format
+                if (!/^[A-Za-z0-9\-]+$/.test(quizId)) {
+                    showError('Format ID Quiz tidak valid');
+                    return;
+                }
+                
+                // Show loading state with subtle animation
+                const submitBtn = quizForm.querySelector('button[type="submit"]');
+                const originalBtnText = submitBtn.innerHTML;
+                submitBtn.disabled = true;
+                submitBtn.classList.add('position-relative', 'overflow-hidden');
+                
+                // Add ripple effect before changing text
+                const ripple = document.createElement('span');
+                ripple.style.position = 'absolute';
+                ripple.style.top = '50%';
+                ripple.style.left = '50%';
+                ripple.style.transform = 'translate(-50%, -50%)';
+                ripple.style.width = '300%';
+                ripple.style.height = '300%';
+                ripple.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+                ripple.style.borderRadius = '50%';
+                ripple.style.opacity = '1';
+                ripple.style.animation = 'ripple 0.8s ease-out forwards';
+                submitBtn.appendChild(ripple);
+                
+                setTimeout(() => {
+                    submitBtn.innerHTML = `
+                        <span class="flex-center gap-2">
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Memproses...
+                        </span>
+                    `;
+                    
+                    // Process the quiz ID (replace with actual API call)
+                    setTimeout(function() {
+                        // Add transition effect before redirect
+                        document.querySelector('.quiz-card').style.transform = 'scale(0.97)';
+                        document.querySelector('.quiz-card').style.opacity = '0.8';
+                        document.querySelector('.quiz-card').style.transition = 'all 0.3s ease';
+                        
+                        setTimeout(() => {
+                            // Redirect to quiz page
+                            window.location.href = `/quiz/${quizId}`;
+                            
+                            // Reset button state (if the redirect fails)
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = originalBtnText;
+                        }, 300);
+                    }, 800);
+                }, 300);
+            });
+            
+            // Hide error message when user starts typing for smoother experience
+            quizIdInput.addEventListener('input', function() {
+                hideError();
+                
+                // Add typing effect
+                const label = quizForm.querySelector('.floating-label');
+                if (this.value.trim() !== '') {
+                    label.classList.add('text-main');
+                } else {
+                    label.classList.remove('text-main');
+                }
+            });
+            
+            // Helper functions with improved visual feedback
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorAlert.classList.remove('d-none');
+                errorAlert.style.animation = 'fadeIn 0.3s ease';
+                quizIdInput.classList.add('border-danger');
+                quizIdInput.focus();
+                
+                // Shake the input field slightly to indicate error
+                quizIdInput.style.animation = 'shake 0.5s ease';
+                setTimeout(() => {
+                    quizIdInput.style.animation = '';
+                }, 500);
+            }
+            
+            function hideError() {
+                errorAlert.classList.add('d-none');
+                quizIdInput.classList.remove('border-danger');
+            }
+        });
+    </script>
+</body>
+</html>

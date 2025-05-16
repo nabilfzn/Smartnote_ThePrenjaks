@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembuat Soal Otomatis - Hasil</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <style>
+        .header-section {
+            background: linear-gradient(135deg, #1e5799 0%, #207cca 100%);
+            color: white;
+            padding: 2rem 0;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 2rem;
+        }
+        .result-section {
+            background-color: #f8f9fa;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        .question-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .taxonomy-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        .choice-item {
+            margin-bottom: 0.5rem;
+        }
+        .correct-answer {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+            padding: 0.75rem;
+            border-radius: 5px;
+            margin-top: 0.5rem;
+        }
+        .explanation-section {
+            background-color: #f8f9fa;
+            padding: 0.75rem;
+            border-radius: 5px;
+            margin-top: 0.5rem;
+        }
+
+        strong {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #0f172a;  /* Biru tua */
+        }
+
+        /* Rekomendasi Styling */
+        .recommendation-card {
+            background-color: #f7f9fc;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .recommendation-card h3 {
+            color: #1e5799;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        .recommendation-card ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .recommendation-card ul li {
+            margin-bottom: 0.75rem;
+            padding: 0.5rem;
+            border-left: 5px solid #207cca;
+            transition: background-color 0.3s;
+        }
+        .recommendation-card ul li:hover {
+            background-color: #e2f3ff;
+            cursor: pointer;
+        }
+        .btn-back {
+            background-color: #207cca;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 5px;
+            margin-top: 2rem;
+            text-decoration: none;
+        }
+        .btn-back:hover {
+            background-color: #1e5799;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header-section">
+        <div class="container text-center">
+            <h1><i class="fas fa-graduation-cap me-2"></i> Aplikasi Pembuat Soal Otomatis</h1>
+            <p class="lead">Hasil Kuis dengan Analisis dan Rekomendasi</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Results Section -->
+        <div id="resultSection" class="result-section">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-list-ol me-2"></i> {{ title }}</h2>
+                <button id="downloadButton" class="btn btn-success">
+                    <i class="fas fa-download me-2"></i> Unduh Hasil (JSON)
+                </button>
+            </div>
+
+            <!-- Questions -->
+            <div id="questionsList">
+                {% for soal in soal_data %}
+                <div class="question-card">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h5 class="mb-0">Soal {{ loop.index }}</h5>
+                        <span class="taxonomy-badge 
+                            {% if soal.kategori_taksonomi == 'C1' %}bg-success
+                            {% elif soal.kategori_taksonomi == 'C2' %}bg-info
+                            {% elif soal.kategori_taksonomi == 'C3' %}bg-primary
+                            {% elif soal.kategori_taksonomi == 'C4' %}bg-warning
+                            {% elif soal.kategori_taksonomi == 'C5' %}bg-danger
+                            {% elif soal.kategori_taksonomi == 'C6' %}bg-dark
+                            {% else %}bg-secondary{% endif %}">
+                            {{ soal.kategori_taksonomi }}
+                        </span>
+                    </div>
+                    <p class="mb-3">{{ soal.pertanyaan }}</p>
+                    <!-- Indicator -->
+                    <div class="mb-3">
+                        {% if soal.is_correct %}
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle me-2"></i> Jawaban Anda Benar!
+                        </div>
+                        {% else %}
+                        <div class="alert alert-danger">
+                            <i class="fas fa-times-circle me-2"></i> Jawaban Anda Salah!
+                        </div>
+                        {% endif %}
+                    </div>
+                    <!-- Choices -->
+                    <div class="mb-3">
+                        {% for pilihan in soal.pilihan %}
+                        <div class="choice-item">
+                            {{ pilihan.label }}. {{ pilihan.text }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <!-- Correct answer if incorrect -->
+                    {% if not soal.is_correct %}
+                    <div class="correct-answer">
+                        <strong>Jawaban Benar: {{ soal.jawaban_benar }}</strong>
+                    </div>
+                    {% endif %}
+                    <!-- Explanation -->
+                    <div class="explanation-section">
+                        <strong>Penjelasan:</strong> {{ soal.penjelasan }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Statistik Kesalahan -->
+            <div class="alert alert-warning mt-4">
+                <strong>Statistik Kesalahan:</strong><br>
+                Dari {{ soal_data|length }} soal yang kamu kerjakan, ada {{ total_salah }} soal yang salah.
+                <ul>
+                    {% for kategori, jumlah in kategori_salah_counter.items() %}
+                        <li>{{ jumlah }} soal pada kategori {{ kategori }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Rekomendasi Section -->
+        <div class="recommendation-card">
+            <h3><i class="fas fa-lightbulb me-2"></i> Rekomendasi Belajar</h3>
+
+            {% if rekomendasi.analisis %}
+            <div class="mb-3">
+                <p><strong>Analisis Hasil:</strong></p>
+                <div class="alert alert-secondary">
+                    {{ rekomendasi.analisis|safe }}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if rekomendasi.rekomendasi %}
+            <p><strong>Langkah-langkah yang disarankan:</strong></p>
+            <ul>
+                {% for item in rekomendasi.rekomendasi %}
+                <li>{{ item|safe }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            {% if rekomendasi.tips_efektif %}
+            <h5>Tips Efektif</h5>
+            <ul>
+                {% for tips in rekomendasi.tips_efektif %}
+                <li>{{ tips|safe }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            {% if rekomendasi.saran_penutup %}
+            <div class="alert alert-info">
+                {{ rekomendasi.saran_penutup|safe }}
+            </div>
+            {% endif %}
+            <!-- Back Button -->
+            <a href="/" class="btn btn-back">
+                <i class="fas fa-arrow-left me-2"></i> Kembali ke Beranda
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-5">
+        <div class="container text-center">
+            <p>© 2025 Aplikasi Pembuat Soal Otomatis dengan AI</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js

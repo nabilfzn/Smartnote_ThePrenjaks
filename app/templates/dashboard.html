@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>SmartNote - Dashboard Smart Classroom</title>
+    
+        <!-- Favicon -->
+        <link rel="shortcut icon" href="{{ url_for('static', filename='assets/images/logo/favicon.png') }}">
+    
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/bootstrap.min.css') }}">
+    
+        <!-- File upload -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/file-upload.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/plyr.css') }}">
+    
+        <!-- DataTables -->
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
+    
+        <!-- Full Calendar -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/full-calendar.css') }}">
+    
+        <!-- jQuery UI -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/jquery-ui.css') }}">
+    
+        <!-- Quill Editor -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/editor-quill.css') }}">
+    
+        <!-- Apex Charts -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/apexcharts.css') }}">
+    
+        <!-- Calendar -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/calendar.css') }}">
+    
+        <!-- jVector Map -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/jquery-jvectormap-2.0.5.css') }}">
+    
+        <!-- Main CSS -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/main.css') }}">
+    </head>
+    
+<body>
+    
+<!--==================== Preloader Start ====================-->
+  <div class="preloader">
+    <div class="loader"></div>
+  </div>
+<!--==================== Preloader End ====================-->
+
+<!--==================== Sidebar Overlay End ====================-->
+<div class="side-overlay"></div>
+<!--==================== Sidebar Overlay End ====================-->
+
+<!-- ============================ Sidebar Start ============================ -->
+    {%include 'components/sidebar.html'%}
+<!-- ============================ Sidebar End  ============================ -->
+
+
+    <div class="dashboard-main-wrapper">
+
+        <div class="top-navbar flex-between gap-16">
+            <div class="flex-align gap-16">
+                <!-- Toggle Button Start -->
+                <button type="button" class="toggle-btn d-xl-none d-flex text-26 text-gray-500"><i class="ph ph-list"></i></button>
+                <!-- Toggle Button End -->
+            </div>
+        </div>
+
+        
+        <div class="dashboard-body">
+            <div class="row gy-4">
+                <div class="col-lg-9">
+                    <!-- Grettings Box Start -->
+                    <div class="grettings-box position-relative rounded-16 bg-main-600 overflow-hidden gap-16 flex-wrap z-1">
+                        <img src="{{ url_for('static', filename='assets/images/bg/grettings-pattern.png') }}" alt="" class="position-absolute inset-block-start-0 inset-inline-start-0 z-n1 w-100 h-100 opacity-6">
+                        <div class="row gy-4">
+                            <div class="col-sm-7">
+                                <div class="grettings-box__content py-xl-4">
+                                    <h2 class="text-white mb-0">Halo, {{ session['username'] }}</h2>
+                                    <p class="text-15 fw-light mt-4 text-white">Selamat datang di SmartNote</p>
+                                    <p class="text-lg fw-light mt-24 text-white">Rekam, rangkum, dan buat soal dengan bantuan AI</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-5 d-sm-block d-none">
+                                <div class="text-center h-100 d-flex justify-content-center align-items-end ">
+                                    <img src="{{ url_for('static', filename='assets/images/thumbs/gretting-img.png') }}" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Grettings Box End -->
+
+                    <!-- Hour Spent Card Start -->
+                     <div class="card mt-24 overflow-hidden">
+                        <div class="card-header">
+                            <div class="mb-0 flex-between flex-wrap gap-8">
+                                <h4 class="mb-0">Statistik Penggunaan</h4>
+                                <div class="flex-align gap-16 flex-wrap">
+                                    <div class="flex-align flex-wrap gap-16">
+                                        <div class="flex-align flex-wrap gap-8">
+                                            <span class="w-8 h-8 rounded-circle bg-main-two-600"></span>
+                                            <span class="text-13 text-gray-600">Rekaman</span>
+                                        </div>
+                                        <div class="flex-align flex-wrap gap-8">
+                                            <span class="w-8 h-8 rounded-circle bg-main-two-200"></span>
+                                            <span class="text-13 text-gray-600">Rangkuman</span>
+                                        </div>
+                                        <div class="flex-align flex-wrap gap-8">
+                                            <span class="w-8 h-8 rounded-circle bg-warning-600"></span>
+                                            <span class="text-13 text-gray-600">Soal</span>
+                                        </div>
+                                    </div>
+                                    <select class="form-select form-control text-13 px-8 pe-24 py-8 rounded-8 w-auto">
+                                        <option value="1">Tahunan</option>
+                                        <option value="1">Bulanan</option>
+                                        <option value="1">Mingguan</option>
+                                        <option value="1">Hari Ini</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <div id="stackedColumnChart"></div>
+                        </div>
+                     </div>
+                    <!-- Hour Spent Card End -->
+
+                    <!-- Table Start -->
+                     <div class="card mt-24 overflow-hidden">
+                        <div class="card-header">
+                            <div class="mb-0 flex-between flex-wrap gap-8">
+                                <h4 class="mb-0">Rekaman Terbaru</h4>
+                                <a href="{{ url_for('upload.arsip_transkrip_page') }}" class="text-13 fw-medium text-main-600 hover-text-decoration-underline">Lihat Semua</a>
+                            </div>
+                        </div>
+                        <div class="card-body p-0 overflow-x-auto scroll-sm scroll-sm-horizontal">
+                            <table class="table style-two mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Nama Rekaman</th>
+                                        <th>Durasi</th>
+                                        <th class="text-center">Status</th>
+                                        <th class="text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="rekaman-list">
+                                    <tr>
+                                        <td colspan="4" class="text-center text-gray-300">Memuat data rekaman...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                     </div>
+                    <!-- Table End -->
+
+                </div>
+                <div class="col-lg-3">
+                    
+                    <!-- Calendar Start -->
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="calendar">
+                                <div class="calendar__header">
+                                    <button type="button" class="calendar__arrow left"><i class="ph ph-caret-left"></i></button>
+                                    <p class="display h6 mb-0">""</p>
+                                    <button type="button" class="calendar__arrow right"><i class="ph ph-caret-right"></i></button>
+                                </div>
+                            
+                                <div class="calendar__week week">
+                                    <div class="calendar__week-text">Mg</div>
+                                    <div class="calendar__week-text">Sn</div>
+                                    <div class="calendar__week-text">Sl</div>
+                                    <div class="calendar__week-text">Rb</div>
+                                    <div class="calendar__week-text">Km</div>
+                                    <div class="calendar__week-text">Jm</div>
+                                    <div class="calendar__week-text">Sb</div>
+                                </div>
+                                <div class="days"></div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <!-- Calendar End -->
+
+                    <!-- Donut Chart Start -->
+                    <div class="card mt-24">
+                        <div class="card-header border-bottom border-gray-100 flex-between gap-8 flex-wrap">
+                            <h5 class="mb-0">Distribusi Konten</h5>
+                            <div class="dropdown flex-shrink-0">
+                                <button class="text-gray-400 text-xl d-flex rounded-4" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="ph-fill ph-dots-three-outline"></i>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu--md border-0 bg-transparent p-0">
+                                    <div class="card border border-gray-100 rounded-12 box-shadow-custom">
+                                        <div class="card-body p-12">
+                                            <div class="max-h-200 overflow-y-auto scroll-sm pe-8">
+                                                <ul>
+                                                    <li class="mb-0">
+                                                        <a href="analytics.html" class="py-6 text-15 px-8 hover-bg-gray-50 text-gray-300 w-100 rounded-8 fw-normal text-xs d-block text-start">
+                                                            <span class="text"> <i class="ph ph-chart-bar me-4"></i> Lihat Detail</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="flex-center">
+                                <div id="activityDonutChart" class="w-auto d-inline-block"></div>
+                            </div>
+
+                            <div class="flex-between gap-8 flex-wrap mt-24">
+                                <div class="flex-align flex-column">
+                                    <span class="w-12 h-12 bg-white border border-3 border-main-600 rounded-circle"></span>
+                                    <span class="text-13 my-4 text-main-600">Rangkuman</span>
+                                    <h6 class="mb-0">45.5%</h6>
+                                </div>
+                                <div class="flex-align flex-column">
+                                    <span class="w-12 h-12 bg-white border border-3 border-main-two-600 rounded-circle"></span>
+                                    <span class="text-13 my-4 text-main-two-600">Modul</span>
+                                    <h6 class="mb-0">32.2%</h6>
+                                </div>
+                                <div class="flex-align flex-column">
+                                    <span class="w-12 h-12 bg-white border border-3 border-warning-600 rounded-circle"></span>
+                                    <span class="text-13 my-4 text-warning-600">Soal</span>
+                                    <h6 class="mb-0">22.3%</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Donut Chart End -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="dashboard-footer">
+    <div class="flex-between flex-wrap gap-16">
+        <p class="text-gray-300 text-13 fw-normal"> &copy; Copyright SmartMic 2025, All Right Reserved</p>
+        <div class="flex-align flex-wrap gap-16">
+            <a href="#" class="text-gray-300 text-13 fw-normal hover-text-main-600 hover-text-decoration-underline">Lisensi</a>
+            <a href="#" class="text-gray-300 text-13 fw-normal hover-text-main-600 hover-text-decoration-underline">Dukungan</a>
+            <a href="#" class="text-gray-300 text-13 fw-normal hover-text-main-600 hover-text-decoration-underline">Bantuan</a>
+            <a href="#" class="text-gray-300 text-13 fw-normal hover-text-main-600 hover-text-decoration-underline">FAQ</a>
+        </div>
+    </div>
+</div>
+    </div>
+    
+    <!-- jQuery -->
+<script src="{{ url_for('static', filename='assets/js/jquery-3.7.1.min.js') }}"></script>
+
+<!-- Bootstrap Bundle -->
+<script src="{{ url_for('static', filename='assets/js/boostrap.bundle.min.js') }}"></script>
+
+<!-- Phosphor -->
+<script src="{{ url_for('static', filename='assets/js/phosphor-icon.js') }}"></script>
+
+<!-- File Upload -->
+<script src="{{ url_for('static', filename='assets/js/file-upload.js') }}"></script>
+
+<!-- Plyr -->
+<script src="{{ url_for('static', filename='assets/js/plyr.js') }}"></script>
+
+<!-- DataTables (CDN tetap boleh langsung) -->
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+
+<!-- Full Calendar -->
+<script src="{{ url_for('static', filename='assets/js/full-calendar.js') }}"></script>
+
+<!-- jQuery UI -->
+<script src="{{ url_for('static', filename='assets/js/jquery-ui.js') }}"></script>
+
+<!-- Quill Editor -->
+<script src="{{ url_for('static', filename='assets/js/editor-quill.js') }}"></script>
+
+<!-- ApexCharts -->
+<script src="{{ url_for('static', filename='assets/js/apexcharts.min.js') }}"></script>
+
+<!-- Calendar -->
+<script src="{{ url_for('static', filename='assets/js/calendar.js') }}"></script>
+
+<!-- jVectorMap -->
+<script src="{{ url_for('static', filename='assets/js/jquery-jvectormap-2.0.5.min.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/js/jquery-jvectormap-world-mill-en.js') }}"></script>
+
+<!-- Main -->
+<script src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
+
+
+
+    <script>
+        
+        // ============================ Donut Chart Start ==========================
+        var options = {
+            series: [45.5, 32.2, 22.3],
+            chart: {
+                height: 200,
+                type: 'donut',
+            },
+            colors: ['#3D7FF9', '#27CFA7', '#FA902F'],
+            enabled: true, // Enable data labels
+            formatter: function (val, opts) {
+                return opts.w.config.series[opts.seriesIndex] + '%';
+            },
+            dropShadow: {
+                enabled: false
+            },
+            plotOptions: {
+                pie: {
+                    donut: {
+                        size: '55%' // Fixed slice width
+                    }
+                }
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200
+                    },
+                    legend: {
+                        show: false
+                    }
+                }
+            }],
+            legend: {
+                position: 'right',
+                offsetY: 0,
+                height: 230,
+                show: false
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#activityDonutChart"), options);
+        chart.render();
+        // ============================ Donut Chart End ==========================
+
+        // ============================ Hour Spent Chart Start ==========================
+        var options = {
+            series: [{
+                name: 'Rekaman',
+                data: [8, 12, 9, 11, 10, 14, 8, 7, 9, 10, 12, 8]
+            }, {
+                name: 'Rangkuman',
+                data: [5, 8, 7, 9, 8, 10, 6, 5, 8, 7, 9, 6]
+            }, {
+                name: 'Soal',
+                data: [3, 5, 4, 6, 4, 7, 5, 3, 4, 6, 5, 4]
+            }],
+            colors: ['#27CFA7', '#A9ECDC', '#FA902F'],
+            chart: {
+                type: 'bar',
+                height: 400,
+                stacked: true,
+                toolbar: {
+                    show: false
+                },
+                zoom: {
+                    enabled: true
+                }
+            },
+            plotOptions: {
+                bar: {
+                    columnWidth: "35%",
+                    horizontal: false,
+                    borderRadius: 10,
+                    borderRadiusApplication: 'end', // 'around', 'end'
+                    borderRadiusWhenStacked: 'last', // 'all', 'last'
+                    dataLabels: {
+                        total: {
+                            enabled: false,
+                            style: {
+                                fontSize: '13px',
+                                fontWeight: 900,
+                            }
+                        }
+                    }
+                },
+            },
+            dataLabels: {
+                enabled: false // Disable bar labels globally
+            },
+            grid: {
+                show: true,
+                borderColor: '#d5dbe7',
+                strokeDashArray: 3,
+                position: 'back', 
+            },
+            xaxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            },
+            yaxis: {
+                labels: {
+                    formatter: function (value) {
+                        return value + " item";
+                    },
+                    style: {
+                        fontSize: "14px"
+                    }
+                },
+            },
+            legend: {
+                show: false,
+                position: 'top',
+                offsetY: 0,
+                horizontalAlign: 'start',
+                markers: {
+                    radius: 50,
+                }
+            },
+            fill: {
+                opacity: 1
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#stackedColumnChart"), options);
+        chart.render();
+        // ============================ Hour Spent Chart End ==========================
+
+        // Load real rekaman data from API
+        document.addEventListener('DOMContentLoaded', function() {
+            loadRekaman();
+        });
+        
+        function loadRekaman() {
+            fetch('/files')
+                .then(response => response.json())
+                .then(data => {
+                    displayRekaman(data);
+                })
+                .catch(error => {
+                    console.error('Error loading rekaman data:', error);
+                    document.getElementById('rekaman-list').innerHTML = 
+                        '<tr><td colspan="4" class="text-center text-gray-300">Gagal memuat data rekaman</td></tr>';
+                });
+        }
+        
+        function displayRekaman(data) {
+            const rekamanList = document.getElementById('rekaman-list');
+            rekamanList.innerHTML = ''; // Kosongkan loading row
+            
+            if (data.files.length === 0) {
+                rekamanList.innerHTML = '<tr><td colspan="4" class="text-center text-gray-300">Tidak ada rekaman tersedia</td></tr>';
+                return;
+            }
+            
+            // Display only the first 5 recordings for the dashboard
+            const filesToShow = data.files.slice(0, 5);
+            
+            filesToShow.forEach(file => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <div class="flex-align gap-8">
+                            <div class="w-40 h-40 rounded-circle bg-main-600 flex-center flex-shrink-0">
+                                <i class="ph ph-microphone text-white"></i>
+                            </div>
+                            <div class="">
+                                <h6 class="mb-0">${file.name}</h6>
+                                <div class="table-list">
+                                    <span class="text-13 text-gray-600">Kelas 10A</span>
+                                    <span class="text-13 text-gray-600">${file.modified}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="text-13 text-gray-600">${file.duration}</span>
+                    </td>
+                    <td>
+                        <div class="flex-align justify-content-center gap-16">
+                            <span class="text-13 py-2 px-8 bg-success-50 text-success-600 d-inline-flex align-items-center gap-8 rounded-pill">
+                                <span class="w-6 h-6 bg-success-600 rounded-circle flex-shrink-0"></span>
+                                Selesai
+                            </span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="flex-align justify-content-center gap-8">
+                            <a href="rangkuman-ai.html" class="btn btn-sm btn-outline-main" title="Lihat Rangkuman">
+                                <i class="ph ph-book-open"></i>
+                            </a>
+                            <a href="modul-ai.html" class="btn btn-sm btn-outline-main" title="Lihat Modul">
+                                <i class="ph ph-notebook"></i>
+                            </a>
+                            <a href="soal-ai.html" class="btn btn-sm btn-outline-main" title="Lihat Soal">
+                                <i class="ph ph-clipboard-text"></i>
+                            </a>
+                        </div>
+                    </td>
+                `;
+                rekamanList.appendChild(row);
+            });
+        }
+        
+        // Delete Event Item
+        $('.delete-btn').on('click', function () {
+            $(this).closest('.event-item').addClass('d-none')
+        }); 
+    </script>
+    
+    </body>
+</html>
