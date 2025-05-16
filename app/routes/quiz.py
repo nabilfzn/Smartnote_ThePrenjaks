@@ -10,15 +10,17 @@ from collections import Counter
 from werkzeug.utils import secure_filename
 from ..models import db, Quiz, Question, Choice, StudentAnswer
 import re
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 
+# Konfigurasi Gemini AI
+GOOGLE_API_KEY = os.getenv("GEMINI_API_KEY")
 
 # Blueprint untuk quiz
 quizz = Blueprint('quizz', __name__)
 
-# Konfigurasi API Gemini
-API_KEY = 'AIzaSyBrMJUmYN9k0_7Zduup7Y-szHGarGKWztA' 
-genai.configure(api_key=API_KEY)
 
 @quizz.route('/quiz')
 def index():

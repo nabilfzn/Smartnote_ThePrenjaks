@@ -1,12 +1,18 @@
-from flask import Blueprint, request, render_template, flash, redirect, url_for, session
+from flask import Blueprint, request, render_template, flash, redirect, url_for, session, make_response
 from flask_login import login_required
 from ..models import User, Transkrip, Summarize, Modul
 from .. import db
 import google.generativeai as genai
 import json
+from dotenv import load_dotenv
+import os
+from io import BytesIO
+from xhtml2pdf import pisa
+
+load_dotenv()
 
 # Konfigurasi Gemini AI
-GOOGLE_API_KEY = 'AIzaSyDBV4t5y7oNh05oZnQxTYcK3rA1FiBd1Wc'
+GOOGLE_API_KEY = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=GOOGLE_API_KEY)
 
 modul_bp = Blueprint('modul', __name__)
@@ -150,3 +156,38 @@ def list_modul():
 
     return render_template('list_modul.html', modul_list=all_modul)
 
+@modul_bp.route('/download_modul_pdf/<int:modul_id>')
+def download_modul_pdf(modul_id):
+    user_id = session.get('user_id')
+    if not user_id:
+        flash("Silakan login terlebih dahulu.", "warning")
+        return redirect(url_for('auth.login'))
+
+    modul_obj = Modul.query.filter_by(id=modul_id, user_id=user_id).first_or_404()
+    transkrip = Transkrip.query.get(modul_obj.transkrip_id)
+
+    try:
+        modul_data = json.loads(modul_obj.data_modul)
+    except (json.JSONDecodeError, TypeError):
+        flash("Data modul rusak atau tidak valid.", "danger")
+        return redirect(url_for('modul.show_modul', modul_id=modul_id))
+
+    html = render_template(
+        'show_modul.html',
+        modul=modul_data,
+        modul_obj=modul_obj,
+        transkrip=transkrip,
+        is_pdf=True
+    )
+
+    result = BytesIO()
+    pisa_status = pisa.CreatePDF(src=html, dest=result)
+
+    if pisa_status.err:
+        flash("Gagal membuat PDF.", "error")
+        return redirect(url_for('modul.show_modul', modul_id=modul_id))
+
+    response = make_response(result.getvalue())
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = f'attachment; filename=modul_{modul_id}.pdf'
+    return response

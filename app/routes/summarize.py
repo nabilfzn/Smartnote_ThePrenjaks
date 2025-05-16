@@ -3,10 +3,13 @@ from ..models import User, Transkrip, Summarize, Modul
 from .. import db
 import google.generativeai as genai
 import json
+from dotenv import load_dotenv
+import os
 
-# Konfigurasi API
-GOOGLE_API_KEY = 'AIzaSyDBV4t5y7oNh05oZnQxTYcK3rA1FiBd1Wc'
-genai.configure(api_key=GOOGLE_API_KEY)
+load_dotenv()
+
+# Konfigurasi Gemini AI
+GOOGLE_API_KEY = os.getenv("GEMINI_API_KEY")
 
 # Inisialisasi blueprint
 summarize_bp = Blueprint('summarize', __name__)

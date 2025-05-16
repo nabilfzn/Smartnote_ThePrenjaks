@@ -9,56 +9,196 @@
     <!-- Phosphor Icons -->
     <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/bold/style.css">
     <style>
+        /* Base styling */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f8f9fa;
             line-height: 1.6;
-            color: #333;
+            color: #2c3e50;
         }
+        
+        /* Header Styling */
         .modul-header {
             background-color: #4e73df;
             color: white;
             padding: 3rem 0;
             margin-bottom: 3rem;
-            border-radius: 0 0 20px 20px;
+            border-radius: 0 0 25px 25px;
+            box-shadow: 0 4px 15px rgba(78, 115, 223, 0.2);
         }
+        
+        .modul-header .lead {
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .badge {
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 500;
+        }
+        
+        .badge i {
+            margin-right: 5px;
+        }
+        
+        /* Content Styling */
         .modul-content {
             background-color: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
         }
+        
         .modul-content h2 {
             color: #2c3e50;
             border-bottom: 2px solid #4e73df;
-            padding-bottom: 0.5rem;
-            margin-top: 2rem;
+            padding-bottom: 0.75rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
         }
+        
+        .modul-content h2:first-child {
+            margin-top: 0;
+        }
+        
         .modul-content h3 {
             color: #4e73df;
-            margin-top: 1.5rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
         }
+        
+        /* Daftar Isi */
         .daftar-isi {
             background-color: #f8f9fa;
-            border-left: 4px solid #4e73df;
-            padding: 1.5rem;
+            border-left: 5px solid #4e73df;
+            padding: 1.75rem;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 2.5rem;
         }
+        
+        .daftar-isi h2 {
+            border-bottom: none;
+            margin-top: 0;
+            padding-bottom: 0.5rem;
+        }
+        
+        .daftar-isi ol {
+            padding-left: 1.25rem;
+        }
+        
+        .daftar-isi li {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        /* Bab Section */
+        .bab-section {
+            margin-bottom: 3rem;
+        }
+        
+        .bab-section p {
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+        }
+        
+        /* Rangkuman Box */
         .rangkuman-box {
-            background-color: #e8f4fd;
-            border-left: 4px solid #1cc88a;
-            padding: 1.5rem;
+            background-color: #e8f7f1;
+            border-left: 5px solid #1cc88a;
+            padding: 1.75rem;
+            border-radius: 0 12px 12px 0;
+            margin: 3rem 0;
+        }
+        
+        .rangkuman-box h2 {
+            border-bottom: none;
+            margin-top: 0;
+            color: #1cc88a;
+            padding-bottom: 0.5rem;
+        }
+        
+        /* Button Styling */
+        .btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-secondary {
+            border-width: 2px;
+        }
+        
+        .btn-success {
+            background-color: #1cc88a;
+            border-color: #1cc88a;
+        }
+        
+        .btn-success:hover {
+            background-color: #19b378;
+            border-color: #19b378;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2.5rem;
+        }
+        
+        .action-buttons .btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #fff;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            padding: 1.5rem 0;
+        }
+        
+        footer p {
+            font-size: 0.95rem;
+        }
+        
+        /* Responsiveness */
+        @media (max-width: 768px) {
+            .modul-header {
+                padding: 2rem 0;
+            }
+            
+            .modul-content {
+                padding: 1.5rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .action-buttons .btn {
+                width: 100%;
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Header -->
-    <div class="modul-header text-center">
+            <div class="modul-header text-center" style="background-color: #4e73df; color: white; padding: 3rem 0; margin-bottom: 3rem; border-radius: 0 0 25px 25px;">
         <div class="container">
-            <h1 class="display-5 fw-bold">
+            <h1 class="display-5 fw-bold mb-3">
                 {{ modul.judul_modul if modul.judul_modul else 'Tanpa Judul' }}
             </h1>
-            <p class="lead">{{ modul.deskripsi_singkat if modul.deskripsi_singkat else '' }}</p>
-            <div class="d-flex justify-content-center gap-3 mb-3">
+            <p class="lead mb-4">{{ modul.deskripsi_singkat if modul.deskripsi_singkat else '' }}</p>
+            <div class="d-flex justify-content-center gap-3 mb-2">
                 <span class="badge bg-light text-dark">
                     <i class="ph ph-calendar"></i> {{ modul_obj.created_at.strftime('%d %B %Y') }}
                 </span>
@@ -78,20 +218,20 @@
                 <div class="modul-content">
                     <!-- Daftar Isi -->
                     {% if modul.Bab %}
-                    <div class="daftar-isi mb-5">
-                        <h2><i class="ph ph-list"></i> Daftar Isi</h2>
+                    <div class="daftar-isi">
+                        <h2><i class="ph ph-list me-2"></i> Daftar Isi</h2>
                         <ol class="mt-3">
                             {% for bab in modul.Bab %}
-                            <li class="mb-2">{{ bab.Sub_Bab }}</li>
+                            <li>{{ bab.Sub_Bab }}</li>
                             {% endfor %}
                         </ol>
                     </div>
 
                     <!-- Isi Modul -->
                     {% for bab in modul.Bab %}
-                    <div class="bab-section mb-5">
-                        <h2>{{ bab.Sub_Bab }}</h2>
-                        <div class="mt-3">
+                    <div class="bab-section">
+                        <h2><i class="ph ph-book-open me-2"></i> {{ bab.Sub_Bab }}</h2>
+                        <div class="bab-content">
                             <p>{{ bab.isi | replace('<br>', '</p><p>') | safe }}</p>
                         </div>
                     </div>
@@ -100,16 +240,19 @@
 
                     <!-- Rangkuman -->
                     {% if modul.rangkuman %}
-                    <div class="rangkuman-box mt-5">
-                        <h2><i class="ph ph-star"></i> Rangkuman</h2>
+                    <div class="rangkuman-box">
+                        <h2><i class="ph ph-star me-2"></i> Rangkuman</h2>
                         <p class="mt-3">{{ modul.rangkuman }}</p>
                     </div>
                     {% endif %}
                     
-                    <!-- Tombol Kembali -->
-                    <div class="mt-4 text-center">
+                    <!-- Tombol Aksi -->
+                    <div class="action-buttons">
                         <a href="{{ url_for('modul.list_modul') }}" class="btn btn-outline-secondary">
-                            ← Kembali ke Daftar Modul
+                            <i class="ph ph-arrow-left"></i> Kembali ke Daftar Modul
+                        </a>
+                        <a href="{{ url_for('modul.download_modul_pdf', modul_id=modul_obj.id) }}" class="btn btn-success">
+                            <i class="ph ph-download"></i> Unduh PDF
                         </a>
                     </div>
                 </div>
@@ -118,7 +261,7 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-light py-4 mt-5">
+    <footer class="py-4 mt-5">
         <div class="container text-center text-muted">
             <p class="mb-0">© 2025 SmartNote - Modul Pembelajaran AI</p>
         </div>
